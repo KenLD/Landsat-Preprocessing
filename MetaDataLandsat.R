@@ -1,34 +1,34 @@
 ##
 ## Projekt Umweltwissenschaften - Ken Mauser
-## Script zur Analyse der Datenqualitaet
+## Script to analyse Dataquality
 ## Landsat Data
 ##
 
-# Arbeitsverzeichnis setzen
+# Set WD
 setwd("C:/Users/Ken Mauser/Desktop/Studium Landau/Projekt Umweltwissenschaften")
 
-# Lade noetige Pakete
+# Load required packages
 require(RStoolbox)
 require(raster)
 
 
 
-# Einlesen der Meta-Daten
+# read the Metadata
 meta2013 <- readMeta("Landsat/LC81910242013304LGN00_MTL.txt")
 
 
-#Überblick über die Meta-Daten, 
-#optional str(meta2012)
+# Summary of the Metadata
+# optional str(meta2012)
 summary(meta2013)
 
-# stackMeta nach Path und Row
+# stackMeta as Path and Row
 p191r24_2013 <- stackMeta(meta2013)
 
 # ----------------- Data Conversion -------------------
 
-# Konvertieren der DNs zur top-Atmosphere-radiance
+# Convert the DNs to top-Atmosphere-radiance
 
-# Extraktion der Umkehrungsparameter
+# Extraction
 
 dn2rad <- meta2013$CALRAD
 dn2rad
@@ -37,14 +37,14 @@ dn2rad
 
 p191r24_2013_rad <- p191r24_2013 * dn2rad$gain + dn2rad$offset
 
-# Dateityp hat sich nun verändert
+# Datatype changed
 
 dataType(p191r24_2013[[1]])
 dataType(p191r24_2013_rad[[1]])
 
 p191r24_2013_rad
 
-# Einbringen der solar irradiation (apparent reflectance berechnen)
+# Solar irradiation (apparent reflectance calculation)
 
 p191r24_2013_ref <- radCor(p191r24_2013_rad, metaData = meta2013, method = "apref")
 plot(p191r24_2013_ref)
@@ -63,7 +63,7 @@ p191r24_2013_sdos <- radCor(p191r24_2013, metaData = meta2013, hazeValues = haze
 #DOS-Methode
 c_dos <- radCor(p191r24_2013_ref, metaData = meta2013, darkProp = 0.01, method = "dos")
 
-#Topographic Illumination Correction # DEM deckt nicht kompletten Bereich ab
+#Topographic Illumination Correction # DEM needed
 #dem <- raster("Landsat/srtm_dem.tif")
 #p191r24_2013_cdr_ilu <- topCor(p191r24_2013, dem = dem, metaData = meta2013, method = "C")
 
