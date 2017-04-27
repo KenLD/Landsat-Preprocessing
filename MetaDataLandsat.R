@@ -1,7 +1,7 @@
 ##
 ## Projekt Umweltwissenschaften - Ken Mauser
 ## Script zur Analyse der Datenqualitaet
-## Daten von Planet.Labs
+## Landsat Data
 ##
 
 # Arbeitsverzeichnis setzen
@@ -17,7 +17,7 @@ require(raster)
 meta2013 <- readMeta("Landsat/LC81910242013304LGN00_MTL.txt")
 
 
-#Überblick über die Meta-Daten, 
+#Ãœberblick Ã¼ber die Meta-Daten, 
 #optional str(meta2012)
 summary(meta2013)
 
@@ -33,11 +33,11 @@ p191r24_2013 <- stackMeta(meta2013)
 dn2rad <- meta2013$CALRAD
 dn2rad
 
-# Auf einzelne Bänder übertragen
+# Auf einzelne BÃ¤nder Ã¼bertragen
 
 p191r24_2013_rad <- p191r24_2013 * dn2rad$gain + dn2rad$offset
 
-# Dateityp hat sich nun verändert
+# Dateityp hat sich nun verÃ¤ndert
 
 dataType(p191r24_2013[[1]])
 dataType(p191r24_2013_rad[[1]])
